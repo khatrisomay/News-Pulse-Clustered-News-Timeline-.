@@ -1,0 +1,7 @@
+feedparser
+beautifulsoup4
+requests
+scikit-learn
+psycopg2-binary
+python-dotenv
+numpy
