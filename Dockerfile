@@ -33,9 +33,9 @@ COPY backend/ ./backend/
 WORKDIR /app/backend
 
 # Expose backend port
-EXPOSE 5000
+EXPOSE 10000
 
-ENV PORT=5000
+ENV PORT=10000
 ENV NODE_ENV=production
 
 # Command to start Express backend

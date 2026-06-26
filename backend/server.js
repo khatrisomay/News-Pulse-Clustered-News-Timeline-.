@@ -6,7 +6,7 @@ const fs = require('fs');
 const db = require('./db');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 10000;
 
 // Enable CORS so the Next.js frontend can connect
 app.use(cors());
