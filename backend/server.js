@@ -18,6 +18,11 @@ app.use((req, res, next) => {
   next();
 });
 
+// GET / - Root health check
+app.get('/', (req, res) => {
+  res.send('News Pulse Backend API is online and running!');
+});
+
 // GET /clusters - List of clusters with article counts and time ranges
 app.get('/api/clusters', async (req, res) => {
   try {

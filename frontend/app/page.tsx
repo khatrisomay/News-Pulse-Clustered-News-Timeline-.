@@ -65,6 +65,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [backendConnected, setBackendConnected] = useState<boolean | null>(null);
+  const [takingLonger, setTakingLonger] = useState(false);
   
   // Search & Filtering States
   const [searchQuery, setSearchQuery] = useState('');
@@ -89,12 +90,19 @@ export default function Dashboard() {
 
   // Fetch Clusters & Timeline Data
   const fetchData = async () => {
+    setLoading(true);
+    setTakingLonger(false);
+    const timer = setTimeout(() => {
+      setTakingLonger(true);
+    }, 4000);
+
     try {
       const connCheck = await fetch(`${API_BASE}/clusters`).catch(() => null);
       if (!connCheck) {
         setBackendConnected(false);
         setError("Cannot connect to backend server. Make sure the Node.js backend is running on port 5000.");
         setLoading(false);
+        clearTimeout(timer);
         return;
       }
       setBackendConnected(true);
@@ -114,6 +122,7 @@ export default function Dashboard() {
       console.error(err);
       setError("Failed to fetch data from backend API.");
     } finally {
+      clearTimeout(timer);
       setLoading(false);
     }
   };
@@ -479,9 +488,16 @@ export default function Dashboard() {
 
         {/* Dashboard Panels */}
         {loading ? (
-          <div className="flex-1 flex flex-col items-center justify-center py-24 gap-3">
+          <div className="flex-1 flex flex-col items-center justify-center py-24 gap-4 text-center">
             <div className="w-10 h-10 border-4 border-neutral-900 border-t-red-600 rounded-full animate-spin" />
-            <p className="text-neutral-550 text-sm font-medium">Fetching topic clusters...</p>
+            <div className="space-y-1.5">
+              <p className="text-neutral-300 text-sm font-medium">Fetching topic clusters...</p>
+              {takingLonger && (
+                <p className="text-neutral-500 text-xs max-w-sm mx-auto animate-pulse px-4">
+                  The backend server is waking up (Render Free Tier cold start). This usually takes 1-2 minutes. Please hang tight!
+                </p>
+              )}
+            </div>
           </div>
         ) : error ? (
           <div className="flex-1 flex flex-col items-center justify-center border border-neutral-900 bg-neutral-950/40 rounded-3xl p-12 text-center shadow-sm">
